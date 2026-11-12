@@ -1,377 +1,125 @@
 <!DOCTYPE html>
-<html lang="pt-BR" class="dark">
+<html lang="pt-BR">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
-  <meta name="theme-color" content="#090d16" />
-  <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
-  <link rel="manifest" href="./manifest.json" />
-  <title>Estrelas da Casa - Cada um por si</title>
-  <style>
-    :root {
-      --bg: #090d16;
-      --surface: #111827;
-      --surface-2: #1e293b;
-      --border: #283548;
-      --text: #f8fafc;
-      --text-muted: #94a3b8;
-      --gold: #fbbf24;
-      --gold-dim: rgba(251, 191, 36, 0.15);
-      --primary: #3b82f6;
-      --success: #10b981;
-      --danger: #ef4444;
-      --purple: #a855f7;
-      --safe-top: env(safe-area-inset-top, 12px);
-      --safe-bottom: env(safe-area-inset-bottom, 12px);
-    }
-
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-      -webkit-tap-highlight-color: transparent;
-      user-select: none;
-    }
-
-    input, select, textarea {
-      user-select: text;
-    }
-
-    html, body {
-      height: 100%;
-      background-color: var(--bg);
-      color: var(--text);
-      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-      overscroll-behavior-y: contain;
-      overflow: hidden;
-    }
-
-    #app {
-      height: 100%;
-      display: flex;
-      flex-direction: column;
-      max-width: 480px;
-      margin: 0 auto;
-      position: relative;
-      background: var(--bg);
-    }
-
-    #main-app {
-      height: 100%;
-      display: flex;
-      flex-direction: column;
-    }
-
-    header {
-      padding: calc(var(--safe-top) + 10px) 16px 12px;
-      background: rgba(17, 24, 39, 0.92);
-      backdrop-filter: blur(12px);
-      border-bottom: 1px solid var(--border);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      z-index: 20;
-    }
-
-    .brand h1 {
-      font-size: 16px;
-      font-weight: 800;
-      letter-spacing: -0.3px;
-      color: var(--gold);
-    }
-
-    .brand p {
-      font-size: 11px;
-      color: var(--text-muted);
-    }
-
-    .header-actions {
-      display: flex;
-      gap: 8px;
-      align-items: center;
-    }
-
-    .icon-btn {
-      background: var(--surface-2);
-      border: 1px solid var(--border);
-      color: var(--text);
-      border-radius: 10px;
-      padding: 6px 10px;
-      font-size: 12px;
-      font-weight: 600;
-      cursor: pointer;
-    }
-
-    #scroll-container {
-      flex: 1;
-      overflow-y: auto;
-      overflow-x: hidden;
-      padding: 12px 16px calc(84px + var(--safe-bottom));
-      position: relative;
-      scroll-behavior: smooth;
-    }
-
-    #ptr-indicator {
-      text-align: center;
-      font-size: 12px;
-      color: var(--gold);
-      height: 0;
-      overflow: hidden;
-      transition: height 0.2s ease;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-    }
-
-    .screen-enter {
-      animation: slideIn 0.24s cubic-bezier(0.22, 1, 0.36, 1) forwards;
-    }
-
-    @keyframes slideIn {
-      from { opacity: 0; transform: translateX(18px); }
-      to { opacity: 1; transform: translateX(0); }
-    }
-
-    .card {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 14px;
-      margin-bottom: 12px;
-    }
-
-    .card-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 10px;
-    }
-
-    .card-title {
-      font-size: 14px;
-      font-weight: 700;
-      display: flex;
-      align-items: center;
-      gap: 6px;
-    }
-
-    .badge {
-      font-size: 11px;
-      padding: 3px 8px;
-      border-radius: 999px;
-      font-weight: 700;
-      background: var(--surface-2);
-      color: var(--text-muted);
-    }
-
-    .badge-gold {
-      background: var(--gold-dim);
-      color: var(--gold);
-      border: 1px solid rgba(251, 191, 36, 0.3);
-    }
-
-    .badge-success { background: rgba(16, 185, 129, 0.15); color: var(--success); }
-    .badge-danger { background: rgba(239, 68, 68, 0.15); color: var(--danger); }
-    .badge-purple { background: rgba(168, 85, 247, 0.15); color: var(--purple); }
-
-    .prize-banner {
-      background: linear-gradient(135deg, rgba(251, 191, 36, 0.2), rgba(245, 158, 11, 0.05));
-      border: 1px solid rgba(251, 191, 36, 0.4);
-      border-radius: 14px;
-      padding: 12px;
-      text-align: center;
-      margin-bottom: 12px;
-    }
-
-    .prize-banner strong {
-      color: var(--gold);
-      font-size: 13px;
-      display: block;
-    }
-
-    .prize-banner span {
-      font-size: 11px;
-      color: var(--text-muted);
-    }
-
-    .mini-rank-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 8px;
-    }
-
-    .mini-rank-item {
-      background: var(--surface-2);
-      border-radius: 12px;
-      padding: 10px;
-      border: 1px solid var(--border);
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-    }
-
-    .mini-rank-item.active-user {
-      border-color: var(--gold);
-    }
-
-    .task-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 10px 0;
-      border-bottom: 1px solid var(--border);
-      gap: 10px;
-    }
-
-    .task-row:last-child { border-bottom: none; }
-
-    .task-info h4 {
-      font-size: 13px;
-      font-weight: 600;
-      margin-bottom: 2px;
-    }
-
-    .task-info p {
-      font-size: 11px;
-      color: var(--text-muted);
-    }
-
-    .btn {
-      border: none;
-      border-radius: 10px;
-      padding: 8px 12px;
-      font-size: 12px;
-      font-weight: 700;
-      cursor: pointer;
-      transition: transform 0.1s ease, opacity 0.2s;
-    }
-
-    .btn:active { transform: scale(0.96); }
-    .btn:disabled { opacity: 0.45; cursor: not-allowed; }
-    .btn-primary { background: var(--primary); color: #fff; }
-    .btn-gold { background: var(--gold); color: #090d16; }
-    .btn-success { background: var(--success); color: #fff; }
-    .btn-danger { background: var(--danger); color: #fff; }
-    .btn-outline { background: transparent; border: 1px solid var(--border); color: var(--text); }
-    .btn-block { width: 100%; padding: 12px; font-size: 14px; }
-
-    .form-group { margin-bottom: 12px; }
-    .form-group label {
-      display: block;
-      font-size: 12px;
-      color: var(--text-muted);
-      margin-bottom: 5px;
-      font-weight: 600;
-    }
-
-    .input-control {
-      width: 100%;
-      background: var(--surface-2);
-      border: 1px solid var(--border);
-      color: var(--text);
-      padding: 12px;
-      border-radius: 12px;
-      font-size: 14px;
-      outline: none;
-    }
-
-    .input-control:focus { border-color: var(--gold); }
-
-    nav.bottom-nav {
-      position: fixed;
-      bottom: 0;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 100%;
-      max-width: 480px;
-      background: rgba(17, 24, 39, 0.96);
-      backdrop-filter: blur(14px);
-      border-top: 1px solid var(--border);
-      display: flex;
-      padding: 8px 8px calc(8px + var(--safe-bottom));
-      z-index: 30;
-    }
-
-    .nav-item {
-      flex: 1;
-      background: none;
-      border: none;
-      color: var(--text-muted);
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      gap: 4px;
-      font-size: 11px;
-      font-weight: 600;
-      cursor: pointer;
-    }
-
-    .nav-item.active { color: var(--gold); }
-    .nav-item span.icon { font-size: 18px; }
-
-    .modal-backdrop {
-      position: fixed;
-      inset: 0;
-      background: rgba(0, 0, 0, 0.78);
-      display: flex;
-      align-items: flex-end;
-      justify-content: center;
-      z-index: 50;
-      padding: 16px;
-    }
-
-    .modal-box {
-      background: var(--surface);
-      border: 1px solid var(--border);
-      border-radius: 20px;
-      width: 100%;
-      max-width: 450px;
-      max-height: 85vh;
-      overflow-y: auto;
-      padding: 18px;
-      animation: slideUp 0.22s ease;
-    }
-
-    @keyframes slideUp {
-      from { transform: translateY(30px); opacity: 0; }
-      to { transform: translateY(0); opacity: 1; }
-    }
-
-    .notif-item {
-      padding: 9px 0;
-      border-bottom: 1px solid var(--border);
-      font-size: 12px;
-      line-height: 1.4;
-    }
-
-    .notif-item:last-child { border-bottom: none; }
-    .notif-time { font-size: 10px; color: var(--text-muted); display: block; margin-top: 2px; }
-
-    .hidden { display: none !important; }
-  </style>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover"/>
+<meta name="theme-color" content="#090d16"/>
+<meta name="apple-mobile-web-app-capable" content="yes"/>
+<link rel="manifest" href="./manifest.json"/>
+<title>Estrelas da Casa - Cada um por si</title>
+<style>
+:root{--bg:#090d16;--s1:#111827;--s2:#1e293b;--bd:#283548;--tx:#f8fafc;--mt:#94a3b8;--gd:#fbbf24;--pr:#3b82f6;--ok:#10b981;--dn:#ef4444;--pp:#a855f7}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent;user-select:none}
+input,select{user-select:text}
+html,body{height:100%;background:var(--bg);color:var(--tx);font-family:system-ui,-apple-system,sans-serif;overflow:hidden;overscroll-behavior-y:contain}
+#app{height:100%;max-width:480px;margin:0 auto;display:flex;flex-direction:column;background:var(--bg)}
+#main-app{height:100%;display:flex;flex-direction:column}
+header{padding:calc(env(safe-area-inset-top,10px) + 10px) 16px 12px;background:rgba(17,24,39,.95);border-bottom:1px solid var(--bd);display:flex;justify-content:space-between;align-items:center}
+header h1{font-size:16px;color:var(--gd);font-weight:800}
+header p{font-size:11px;color:var(--mt)}
+#scroll{flex:1;overflow-y:auto;padding:12px 16px calc(86px + env(safe-area-inset-bottom,12px));scroll-behavior:smooth}
+#ptr{text-align:center;font-size:11px;color:var(--gd);height:0;overflow:hidden;transition:height .2s;display:flex;align-items:center;justify-content:center}
+.card{background:var(--s1);border:1px solid var(--bd);border-radius:16px;padding:14px;margin-bottom:12px}
+.ch{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;font-size:14px;font-weight:700}
+.bg{font-size:11px;padding:3px 8px;border-radius:99px;font-weight:700;background:var(--s2);color:var(--mt)}
+.bg-gd{background:rgba(251,191,36,.15);color:var(--gd);border:1px solid rgba(251,191,36,.3)}
+.bg-ok{background:rgba(16,185,129,.15);color:var(--ok)}
+.bg-dn{background:rgba(239,68,68,.15);color:var(--dn)}
+.bg-pp{background:rgba(168,85,247,.15);color:var(--pp)}
+.banner{background:linear-gradient(135deg,rgba(251,191,36,.2),rgba(245,158,11,.05));border:1px solid rgba(251,191,36,.4);border-radius:14px;padding:12px;text-align:center;margin-bottom:12px}
+.banner strong{color:var(--gd);font-size:13px;display:block}
+.banner span{font-size:11px;color:var(--mt)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.mitem{background:var(--s2);border:1px solid var(--bd);border-radius:12px;padding:10px;display:flex;justify-content:space-between;align-items:center}
+.mitem.me{border-color:var(--gd)}
+.row{display:flex;justify-content:space-between;align-items:center;padding:10px 0;border-bottom:1px solid var(--bd);gap:10px}
+.row:last-child{border-bottom:none}
+.row h4{font-size:13px;margin-bottom:2px}
+.row p{font-size:11px;color:var(--mt)}
+.btn{border:none;border-radius:10px;padding:8px 12px;font-size:12px;font-weight:700;cursor:pointer}
+.btn:active{transform:scale(.97)}
+.btn:disabled{opacity:.4;cursor:not-allowed}
+.b-pr{background:var(--pr);color:#fff}
+.b-gd{background:var(--gd);color:#090d16}
+.b-ok{background:var(--ok);color:#fff}
+.b-dn{background:var(--dn);color:#fff}
+.b-ol{background:var(--s2);border:1px solid var(--bd);color:var(--tx)}
+.b-blk{width:100%;padding:14px;font-size:15px;display:block;text-align:center}
+.fg{margin-bottom:12px}
+.fg label{display:block;font-size:11px;color:var(--mt);margin-bottom:5px;font-weight:700}
+.inp{width:100%;background:var(--s2);border:1px solid var(--bd);color:var(--tx);padding:12px;border-radius:12px;font-size:14px;outline:none}
+.inp:focus{border-color:var(--gd)}
+nav{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:480px;background:rgba(17,24,39,.97);border-top:1px solid var(--bd);display:flex;padding:8px 8px calc(8px + env(safe-area-inset-bottom,12px));z-index:30}
+.ni{flex:1;background:none;border:none;color:var(--mt);display:flex;flex-direction:column;align-items:center;gap:3px;font-size:11px;font-weight:700;cursor:pointer}
+.ni.active{color:var(--gd)}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.82);display:flex;align-items:flex-end;justify-content:center;z-index:50;padding:16px}
+.mbox{background:var(--s1);border:1px solid var(--bd);border-radius:20px;width:100%;max-width:450px;max-height:85vh;overflow-y:auto;padding:18px}
+.nitem{padding:8px 0;border-bottom:1px solid var(--bd);font-size:12px;line-height:1.4}
+.nitem span{display:block;font-size:10px;color:var(--mt)}
+.hidden{display:none!important}
+.anim{animation:push .22s cubic-bezier(.22,1,.36,1)}
+@keyframes push{from{opacity:0;transform:translateX(16px)}to{opacity:1;transform:none}}
+</style>
 </head>
 <body>
-  <div id="app">
-    <!-- TELA DE LOGIN -->
-    <div id="login-screen" style="padding: 24px 18px; overflow-y: auto; height: 100%;">
-      <div style="text-align: center; margin: 24px 0 28px;">
-        <div style="font-size: 42px; margin-bottom: 8px;">⭐🏠</div>
-        <h1 style="font-size: 22px; font-weight: 800; color: var(--gold);">Estrelas da Casa</h1>
-        <p style="font-size: 13px; color: var(--text-muted);">Cada um por si · Acesso Privado</p>
-      </div>
+<div id="app">
+  <div id="login-screen" style="padding:20px 16px;overflow-y:auto;height:100%">
+    <div style="text-align:center;margin:12px 0 18px">
+      <div style="font-size:38px">⭐🏠</div>
+      <h1 style="font-size:21px;color:var(--gd);font-weight:800">Estrelas da Casa</h1>
+      <p style="font-size:12px;color:var(--mt)">Cada um por si · Acesso Privado</p>
+    </div>
+    <form class="card" onsubmit="event.preventDefault();fazerLogin()">
+      <div class="fg"><label>NOME DO PARTICIPANTE</label><input id="l-name" class="inp" type="text" placeholder="Tailan, Carol, Karine ou Caio" required/></div>
+      <div class="fg"><label>IDADE</label><input id="l-age" class="inp" type="number" inputmode="numeric" placeholder="Ex: 20" required/></div>
+      <div class="fg"><label>SENHA PESSOAL</label><input id="l-pass" class="inp" type="password" placeholder="Crie no 1º acesso ou digite a sua" required/></div>
+      <p id="l-err" class="hidden" style="color:var(--dn);font-size:12px;font-weight:700;margin-bottom:10px"></p>
+      <button type="submit" class="btn b-gd b-blk">ENTRAR NO PAINEL</button>
+      <p style="font-size:11px;color:var(--mt);margin-top:10px;text-align:center">No 1º acesso com Nome e Idade corretos, sua senha pessoal será criada.</p>
+    </form>
+    <div class="banner"><strong>Meta Final: R$ 150 para o 1º Colocado no Fim de Ano!</strong><span>Escala contínua até 31 de dezembro</span></div>
+  </div>
 
-      <div class="card">
-        <div class="form-group">
-          <label for="login-name">NOME DO PARTICIPANTE</label>
-          <input id="login-name" class="input-control" type="text" placeholder="Ex: Tailan, Carol, Karine ou Caio" autocomplete="off" />
-        </div>
-        <div class="form-group">
-          <label for="login-age">IDADE</label>
-          <input id="login-age" class="input-control" type="number" inputmode="numeric" placeholder="Digite sua idade" />
-        </div>
-        <div class="form-group">
-          <label for="login-pass">SENHA PESSOAL</label>
-          <input id="login-pass" class="input-control" type="password" placeholder="Crie no 1º acesso ou digite sua senha" />
-        </div>
-        <p id="login-hint" style="font-size: 11px; color: var(--text-muted); margin-bottom: 14px;">
+  <div id="main-app" class="hidden">
+    <header>
+      <div><h1>Estrelas da Casa - Cada um por si</h1><p id="h-sub">Olá</p></div>
+      <div style="display:flex;gap:8px">
+        <button type="button" class="btn b-ol" onclick="reqNotif()">🔔</button>
+        <button type="button" class="btn b-ol" onclick="openAcc()">Conta</button>
+      </div>
+    </header>
+    <div id="scroll"><div id="ptr">↻ Puxe para atualizar...</div><div id="tab-view" class="anim"></div></div>
+    <nav>
+      <button type="button" class="ni active" data-t="painel" onclick="goTab('painel')"><span>🏠</span><span>Painel</span></button>
+      <button type="button" class="ni" data-t="ranking" onclick="goTab('ranking')"><span>🏆</span><span>Ranking</span></button>
+      <button type="button" class="ni" data-t="regras" onclick="goTab('regras')"><span>📜</span><span>Regras</span></button>
+    </nav>
+  </div>
+
+  <div id="modal" class="modal hidden" onclick="if(event.target.id==='modal')closeM()"><div class="mbox" id="mbox"></div></div>
+</div>
+
+<script>
+const USERS_CFG=[{id:'tailan',name:'Tailan',age:20},{id:'carol',name:'Carol',age:19},{id:'karine',name:'Karine',age:16},{id:'caio',name:'Caio',age:14}];
+const ORDER=['Tailan','Carol','Karine','Caio'];
+const ROUTINES=[
+  {id:'acordar',t:'Acordar',w:'07:31',wk:'09:01',n:'Até 7:30 (fim de semana 9:00)'},
+  {id:'lencol',t:'Dobrar o lençol',w:'07:40',wk:'09:10',n:''},
+  {id:'dentes',t:'Escovar os dentes e tomar café',w:'08:20',wk:'10:00',n:''},
+  {id:'vcafe',t:'Lavar as vasilhas do café da manhã',w:'08:30',wk:'10:10',n:''},
+  {id:'valmoco',t:'Lavar as vasilhas do almoço',w:'12:10',wk:'12:20',n:''},
+  {id:'vtarde',t:'Lavar as vasilhas do café da tarde',w:'15:50',wk:'16:00',n:''},
+  {id:'vjanta',t:'Lavar as vasilhas da janta',w:'22:40',wk:'23:59',n:'Fim de semana: quando quiser'}
+];
+const SCHED=[
+  {k:'garr',l:'Garrafas',e:'',w1:['Caio','Tailan','Carol','Karine','Caio','Tailan','Carol'],w2:['Karine','Caio','Tailan','Carol','Karine','Caio','Tailan']},
+  {k:'cafe_m',l:'Café da manhã',e:'Antes das 06:00 · fim de semana 08:00',w1:['Karine','Caio','Tailan','Carol','Karine','Caio','Tailan'],w2:['Carol','Karine','Caio','Tailan','Carol','Karine','Caio']},
+  {k:'cafe_t',l:'Café da tarde',e:'Antes das 15:00 · fim de semana 15:20',w1:['Caio','Carol','Karine','Caio','Tailan','Carol','Karine'],w2:['Caio','Carol','Karine','Caio','Tailan','Carol','Karine']},
+  {k:'var_m',l:'Varrer (manhã)',e:'',w1:['Karine','Carol','Karine','Caio','Tailan','Carol','Karine'],w2:['Carol','Karine','Carol','Karine','Caio','Carol','Karine']},
+  {k:'var_t',l:'Varrer (tarde)',e:'',w1:['Carol','Caio','Tailan','Carol','Karine','Caio','Tailan'],w2:['Carol','Caio','Tailan','Carol','Karine','Caio','Tailan']},
+  {k:'almoco',l:'Almoço',e:'',w1:['Carol','Karine','Carol','Karine','Caio','Carol','Karine'],w2:['Carol','Karine','Carol','Karine','Caio','Carol','Karine']},
+  {k:'janta',l:'Janta',e:'',w1:['Tailan','Carol','Karine','Caio','Tailan','Carol','Karine'],w2:['Caio','Tailan','Carol','Karine','Caio','Tailan','Carol']},
+  {k:'fog_a',l:'Fogão do almoço',e:'',w1:['Carol','Karine','Caio','Tailan','Carol','Karine','Caio'],w2:['Carol','Karine','Caio','Tailan','Carol','Karine','Caio']},
+  {k:'fog_j',l:'Fogão da janta',e:'',w1:['Karine','Caio','Tailan','Carol','Karine','Caio','Tailan'],w2:['Carol','Karine','Caio','Tailan','Carol','Karine','Caio']},
+  {k:'banh',l:'Banheiro',e:'',w1:['Karine','Caio','Tailan','Carol','Karine','Caio','Tailan'],w2:['Carol','Karine','Caio','Tailan','Carol','Karine','Caio']},
+  {k:'roupa',l:'Roupa',e:'Só quem lava é o próprio dono',w1:['Tailan','Carol','Karine','Caio','Tailan','Carol','Karine'],w2:['Caio','Tailan','Carol','Karine','Caio','Tailan','Carol']},
